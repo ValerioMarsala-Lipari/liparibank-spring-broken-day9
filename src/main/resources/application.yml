@@ -1,0 +1,63 @@
+spring:
+  profiles:
+    active: dev
+
+  application:
+    name: liparibank-day09
+
+  datasource:
+    url: jdbc:h2:mem:liparibankdb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+    hikari:
+      pool-name: LipariBankPool
+      maximum-pool-size: 5
+      minimum-idle: 2
+      connection-timeout: 30000
+      idle-timeout: 600000
+      max-lifetime: 1800000
+
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        dialect: org.hibernate.dialect.H2Dialect
+
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+
+  cache:
+    caffeine:
+      spec: maximumSize=100,expireAfterWrite=5m
+    cache-names: branches,branchStats
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,metrics,prometheus,caches
+  endpoint:
+    health:
+      show-details: always
+  metrics:
+    export:
+      prometheus:
+        enabled: true
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+  api-docs:
+    path: /v3/api-docs
+
+logging:
+  level:
+    com.lipari.bank: DEBUG
+    org.hibernate.SQL: DEBUG
+    org.springframework.cache: TRACE
